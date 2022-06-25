@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import fakeData from '../../fakeData/products.json';
+import { addToDb } from '../../utilities/fakedb';
 import Cart from '../cart/Cart';
 import Product from '../product/Product';
 import './shop.css';
@@ -10,15 +11,46 @@ const Shop = () => {
     const [cart,setCart]=useState([]);
 
     const handleAddProduct = (product) => {
-        const newcart = [...cart,product];
+        const sameProduct = cart.find(pd=>pd.id===product.id);
+        let count=1;
+        let newcart;
+        if(sameProduct){
+            count = sameProduct.quantity +1;
+            sameProduct.quantity= count;
+            const others= cart.filter(pd=>pd.id!==product.id);
+            newcart = [...others,sameProduct]
+        }
+        else {
+            product.quantity = 1;
+            newcart = [...cart,product];
+            
+        }
+        
         setCart(newcart);
+        // const count = newcart.filter(pd=>pd.id===product.id)
+        addToDb(product.id);
     }
-    
+    useEffect(()=>{
+        const saveCart =JSON.parse( localStorage.getItem("shopping-cart"));
+        
+         const productKey = Object.keys(saveCart);
+      //   saveCart.map((pd)=>console.log(pd))
+        // eslint-disable-next-line no-undef
+        const cartProduct = productKey.map(key=>{
+          const product= fakeData.find(pd=>pd.id===key);
+          product.quantity=saveCart[key];
+
+          return product;
+        },[])
+      //   console.log(cartProduct);
+      setCart(cartProduct);
+},[])
+
     return (
         <div className='shop-container'>
             <div className="product-container">
                 {
-                    products.map(product=> <Product handleAddProduct = {handleAddProduct} product={product} key={product.id}></Product>)
+                    products.map(product=> <Product showAddCart = {true} handleAddProduct = {handleAddProduct} product={product} key={product.id}></Product>)
                 }
             </div>
             <div className="cart-container">

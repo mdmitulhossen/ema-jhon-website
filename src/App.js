@@ -6,6 +6,7 @@ import Review from './component/review/Review';
 import Inventory from './component/inventory/Inventory';
 import NotFound from './component/NotFound/NotFound';
 import { Routes,Route} from 'react-router-dom';
+import ProductDetails from './component/ProductDetails/ProductDetails';
 
 
 
@@ -21,6 +22,7 @@ function App() {
              <Route exact path='/shop' element={<Shop/>}/>
              <Route exact path='/review' element={<Review/>}/>
              <Route exact path='/inventory' element={<Inventory/>}/>
+             <Route exact path='/product/:productId' element={<ProductDetails/>}/>
              <Route  path='*' element={<NotFound/>}/>
         </Routes>
       
