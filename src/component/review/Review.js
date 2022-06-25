@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import fakeData from "../../fakeData/products.json"
-import { removeFromDb } from '../../utilities/fakedb';
+import { deleteShoppingCart, removeFromDb } from '../../utilities/fakedb';
 import Cart from '../cart/Cart';
 import ReviewItem from '../ReviewItem/ReviewItem';
+import { Link } from 'react-router-dom';
 
 const review = () => {
     
  // eslint-disable-next-line react-hooks/rules-of-hooks
  const[cart,setcart] = useState([]);
+
+  const handlePlaceOrder =()=>{
+    setcart([]);
+    deleteShoppingCart();
+    localStorage.setItem('shopping-cart', JSON.stringify({}));
+    
+ }
 
  const handleRemovProduct=(productId)=>{
     // console.log("remove",productId);
@@ -17,7 +25,7 @@ const review = () => {
  };
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(()=>{
-          const saveCart =JSON.parse( localStorage.getItem("shopping-cart"));
+          const saveCart =JSON.parse(localStorage.getItem("shopping-cart"));
           
            const productKey = Object.keys(saveCart);
         //   saveCart.map((pd)=>console.log(pd))
@@ -38,8 +46,11 @@ const review = () => {
                     cart.map(pd=><ReviewItem product={pd} key={pd.id} removeProduct={handleRemovProduct}></ReviewItem>)
                 }
             </div>
+            
             <div className='cart-container'>
-                <Cart cart={cart}></Cart>
+                <Cart cart={cart}>
+                <Link to="/review"><button onClick={handlePlaceOrder}     className='main-btn'>Place Order</button></Link>
+                </Cart>
             </div>
             
         </div>

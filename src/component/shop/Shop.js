@@ -4,6 +4,7 @@ import { addToDb } from '../../utilities/fakedb';
 import Cart from '../cart/Cart';
 import Product from '../product/Product';
 import './shop.css';
+import { Link } from 'react-router-dom';
 
 const Shop = () => {
     const first10=fakeData.slice(0,10);
@@ -31,8 +32,8 @@ const Shop = () => {
         addToDb(product.id);
     }
     useEffect(()=>{
-        const saveCart =JSON.parse( localStorage.getItem("shopping-cart"));
-        
+        const saveCart =JSON.parse(localStorage.getItem("shopping-cart"));
+        console.log(saveCart)
          const productKey = Object.keys(saveCart);
       //   saveCart.map((pd)=>console.log(pd))
         // eslint-disable-next-line no-undef
@@ -54,7 +55,9 @@ const Shop = () => {
                 }
             </div>
             <div className="cart-container">
-                <Cart cart={cart}></Cart>
+                <Cart cart={cart}>
+                    <Link to="/review"><button      className='main-btn'>Review Order</button></Link>
+                </Cart>
             </div>
             
             
